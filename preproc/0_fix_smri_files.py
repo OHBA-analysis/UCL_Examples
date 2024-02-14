@@ -18,6 +18,9 @@ def run(cmd):
 
 files = ["LN_VTA2.nii"]
 
+# Make output directory
+run(f"mkdir -p data/smri")
+
 for file in files:
     # Copy the original file
     run(f"cp data/smri_original/{file} data/smri")

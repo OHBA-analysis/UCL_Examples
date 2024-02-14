@@ -37,7 +37,7 @@ covs = load_covariances(
 )
 
 # Load template covariance
-template_cov = np.load("../meguk_norm_model/template_cov.npy")
+template_cov = np.load("../camcan_norm_model/template_cov.npy")
 
 # Output directory
 os.makedirs("data/npy", exist_ok=True)

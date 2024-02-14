@@ -50,7 +50,8 @@ subjects = ["LN_VTA2"]
 
 # Lists for input files
 preproc_files = ["data/preproc/mg04938_BrainampDBS_20170504_01_preproc_raw.fif"]
-smri_files = ["data/smri/LN_VTA2.nii"]
+#smri_files = ["data/smri/LN_VTA2.nii"]
+smri_files = ["/Users/cgohil/packages/fsl/data/standard/MNI152_T1_2mm.nii.gz"]
 
 # Output directory
 coreg_dir = "data/coreg"

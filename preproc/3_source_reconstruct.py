@@ -26,7 +26,7 @@ config = """
     - forward_model:
         model: Single Layer
     - beamform_and_parcellate:
-        freq_range: [1, 45]
+        freq_range: [1, 80]
         chantypes: mag
         rank: {mag: 120}
         parcellation_file: Glasser52_binary_space-MNI152NLin6_res-8x8x8.nii.gz
