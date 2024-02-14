@@ -15,10 +15,7 @@ config = """
 """
 
 # Create a list of paths to files to preprocess
-inputs = [
-    "data/raw/sub-001/meg/sub-001_task-resteyesopen_meg.ds",
-    "data/raw/sub-002/meg/sub-002_task-resteyesopen_meg.ds",
-]
+inputs = ["data/raw/mg04938_BrainampDBS_20170504_01_raw.fif"]
 
 # Directory to save output to
 outdir = "data/preproc"

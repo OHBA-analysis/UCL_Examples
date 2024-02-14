@@ -19,13 +19,13 @@ def save_fiducials(src_dir, subject, preproc_file, smri_file, epoch_file):
     lpa = [float(x) for x in data[1].split()[1:]]
     rpa = [float(x) for x in data[2].split()[1:]]
 
-    nas[0], nas[1], nas[2] = nas[1], nas[0], nas[2]
-    lpa[0], lpa[1], lpa[2] = lpa[1], lpa[0], lpa[2]
-    rpa[0], rpa[1], rpa[2] = rpa[1], rpa[0], rpa[2]
+    nas[0], nas[1], nas[2] = nas[1], -nas[0], nas[2]
+    lpa[0], lpa[1], lpa[2] = lpa[1], -lpa[0], lpa[2]
+    rpa[0], rpa[1], rpa[2] = rpa[1], -rpa[0], rpa[2]
 
     polhemus_nasion = nas
-    polhemus_rpa = lpa  # lpa and rpa swapped?
-    polhemus_lpa = rpa
+    polhemus_rpa = rpa
+    polhemus_lpa = lpa
     polhemus_headshape = [0, 0, 0]
 
     filenames = source_recon.rhino.get_coreg_filenames(src_dir, subject)

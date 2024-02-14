@@ -1,37 +1,63 @@
-"""Sign flipping.
+"""Align the sign of each parcel time course across subjects
+and save the data as a vanilla numpy file.
 
-Note, this script is only needed if you're training a dynamic network
-model (e.g. the HMM) using the time-delay embedded (TDE) approach.
-
-You can skip this if you're training the HMM on amplitude envelope data
-or calculating sign-invariant quantities such as amplitude envelope
-correlations or power.
 """
 
 # Authors: Chetan Gohil <chetan.gohil@psych.ox.ac.uk>
 
-from osl import source_recon
+import os
+import mne
+import numpy as np
+from glob import glob
 
-# Source directory and subjects to sign flip
-src_dir = "data/src"
-subjects = ["sub-001", "sub-002"]
-
-# Find a good template subject to align other subjects to
-template = source_recon.find_template_subject(
-    src_dir, subjects, n_embeddings=15, standardize=True
+from osl.source_recon.sign_flipping import (
+    load_covariances,
+    find_template_subject,
+    find_flips,
+    apply_flips,
 )
 
-# Settings
-config = f"""
-    source_recon:
-    - fix_sign_ambiguity:
-        template: {template}
-        n_embeddings: 15
-        standardize: True
-        n_init: 3
-        n_iter: 2500
-        max_flips: 20
-"""
+def load(filename):
+    """Load data without bad segments."""
+    raw = mne.io.read_raw_fif(filename, verbose=False)
+    raw = raw.pick("misc")
+    data = raw.get_data(reject_by_annotation="omit", verbose=False)
+    return data.T
 
-# Do the sign flipping
-source_recon.run_src_batch(config, src_dir, subjects)
+
+# Files to sign flip
+files = sorted(glob("data/src/*/parc/parc-raw.fif"))
+
+# Get covariance matrices
+covs = load_covariances(
+    files,
+    n_embeddings=15,
+    standardize=True,
+    loader=load,
+)
+
+# Load template covariance
+template_cov = np.load("../meguk_norm_model/template_cov.npy")
+
+# Output directory
+os.makedirs("data/npy", exist_ok=True)
+
+# Do sign flipping
+for i in range(len(files)):
+    print("Sign flipping", files[i])
+
+    # Find the channels to flip
+    flips, metrics = find_flips(
+        covs[i],
+        template_cov,
+        n_embeddings=15,
+        n_init=3,
+        n_iter=2500,
+        max_flips=20,
+    )
+
+    # Apply flips to the parcellated data and save
+    parc_data = load(files[i])
+    parc_data *= flips[np.newaxis, ...]
+    subject = files[i].split("/")[-3]
+    np.save(f"data/npy/{subject}.npy", parc_data)

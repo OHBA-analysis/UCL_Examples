@@ -12,15 +12,16 @@ import nibabel as nib
 
 from osl import source_recon
 
-files = ["data/smri/LN_VTA2.nii"]
+def run(cmd):
+    print(cmd)
+    source_recon.rhino.utils.system_call(cmd)
+
+files = ["LN_VTA2.nii"]
 
 for file in files:
-    smri = nib.load(file)
+    # Copy the original file
+    run(f"cp data/smri_original/{file} data/smri")
+    file = f"data/smri/{file}"
 
-    # Fix sform code
-    sformcode = smri.header.get_sform(coded=True)[-1]
-    if sformcode not in [1, 4]:
-        cmd = f"fslorient -setsformcode 1 {file}"
-        source_recon.rhino.utils.system_call(cmd)
-
-print("Done")
+    # Set the sform code to 1
+    run(f"fslorient -setsformcode 1 {file}")

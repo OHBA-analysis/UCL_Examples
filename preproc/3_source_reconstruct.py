@@ -34,14 +34,11 @@ config = """
         orthogonalisation: symmetric
 """
 
-# Subject IDs
-subjects = ["sub-001", "sub-002"]
+# List of subject IDs
+subjects = ["LN_VTA2"]
 
 # Fif files containing the sensor-level preprocessed data for each subject
-preproc_files = [
-    "data/preproc/sub-001_task-resteyesopen_meg/sub-001_task-resteyesopen_meg_preproc_raw.fif",
-    "data/preproc/sub-002_task-resteyesopen_meg/sub-002_task-resteyesopen_meg_preproc_raw.fif",
-]
+preproc_files = ["data/preproc/mg04938_BrainampDBS_20170504_01_preproc_raw.fif"]
 
 # Source reconstruction
 source_recon.run_src_batch(
