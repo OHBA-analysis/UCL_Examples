@@ -1,1 +1,0 @@
-This model was trained on the data in: /well/woolrich/projects/camcan/autumn23/prepared
